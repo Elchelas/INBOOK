@@ -46,7 +46,7 @@ $librosOcio = $stmtLibros->fetchAll();
                 <?php foreach($librosOcio as $libro): ?>
                     <a href="ver_libro.php?id=<?php echo $libro['id']; ?>" style="text-decoration: none; color: inherit;">
                         <div class="book-card">
-                            <img src="ver_binario.php?t=libros&id=<?php echo $libro['id']; ?>" alt="Portada" style="width: 150px; height: 200px; object-fit: cover; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                            <img src="../auth/ver_binario.php?t=libros&id=<?php echo $libro['id']; ?>" alt="Portada" style="width: 150px; height: 200px; object-fit: cover; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
                             <p><b><?php echo $libro['titulo']; ?></b></p>
                             <small><?php echo $libro['autor']; ?></small>
                         </div>

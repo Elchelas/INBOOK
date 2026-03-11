@@ -1,6 +1,7 @@
 <?php
 require_once '../config/db.php';
-
+$stmtC = $pdo->query("SELECT id, nombre_carrera FROM carreras ORDER BY nombre_carrera ASC");
+$carreras = $stmtC->fetchAll();
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $titulo = $_POST['titulo'];
     $autor = $_POST['autor'];
@@ -33,21 +34,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 ?>
 
-<form method="POST" enctype="multipart/form-data">
-    <input type="text" name="titulo" placeholder="Título" required>
-    <input type="file" name="portada" accept="image/*" required>
-    <button type="submit">Subir Libro e Imagen</button>
-</form>
-
 <!DOCTYPE html>
 <html lang="es">
+    <div class="top-bar">
+        <div><b>ADMIN</b> | Gestión de Biblioteca</div>
+        <a href="dashboard.php" style="color:white;">Volver al Panel</a>
+    </div>
 <head>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; }
+        th, td { padding: 12px; border: 1px solid #ddd; text-align: left; }
+        th { background-color: var(--dark-bg); color: white; }
+        .img-tabla { width: 50px; height: 70px; object-fit: cover; border-radius: 4px; }
+        .btn-delete { background: #dc3545; color: white; padding: 5px 10px; border-radius: 4px; text-decoration: none; font-size: 0.8rem; }
+        .btn-delete:hover { background: #a71d2a; }
+    </style>
     <title>Agregar Libro | Admin</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 </head>
 <body class="bg-light">
     <div class="container mt-4">
-        <a href="dashboard.php" class="btn btn-secondary mb-3">Volver</a>
         <div class="card shadow">
             <div class="card-header bg-dark text-white"><h5>Nuevo Libro</h5></div>
             <div class="card-body">
@@ -73,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <div class="col-md-4 mb-3">
                             <label>Carrera (Solo académicos)</label>
                             <select name="carrera_id" class="form-select">
-                                <option value="">N/A</option>
+                                <option value="">Acervo de uso común</option>
                                 <?php foreach($carreras as $c): ?>
                                     <option value="<?=$c['id']?>"><?=$c['nombre_carrera']?></option>
                                 <?php endforeach; ?>

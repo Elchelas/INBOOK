@@ -1,28 +1,41 @@
 <?php
 session_start();
-if (!isset($_SESSION['user_id']) || $_SESSION['rol'] != 'alumno') {
+require_once '../config/db.php';
+
+// Redirigir si no hay sesión
+if (!isset($_SESSION['user_id'])) {
     header("Location: ../index.php");
     exit();
 }
-require_once '../config/db.php';
 
-// 1. Obtener datos del alumno (carrera y semestre)
-$stmt = $pdo->prepare("SELECT u.*, c.nombre_carrera FROM usuarios u JOIN carreras c ON u.carrera_id = c.id WHERE u.id = ?");
-$stmt->execute([$_SESSION['user_id']]);
-$alumno = $stmt->fetch();
-// ... después de obtener los datos del alumno ...
-$resultados = null;
-if (isset($_GET['query']) && !empty($_GET['query'])) {
-    $search = "%" . $_GET['query'] . "%";
-    $stmtS = $pdo->prepare("SELECT * FROM libros WHERE titulo LIKE ? OR autor LIKE ?");
-    $stmtS->execute([$search, $search]);
-    $resultados = $stmtS->fetchAll();
+$usuario_id = $_SESSION['user_id'];
+
+// 1. Cargamos datos del alumno (Arregla error de la línea 53 y 106)
+$stmtUser = $pdo->prepare("SELECT u.*, c.nombre_carrera 
+                           FROM usuarios u 
+                           LEFT JOIN carreras c ON u.carrera_id = c.id 
+                           WHERE u.id = ?");
+$stmtUser->execute([$usuario_id]);
+$alumno = $stmtUser->fetch();
+
+// 2. Lógica de Búsqueda (Arregla error de la línea 70 y 72)
+$resultados_busqueda = null;
+$query_busqueda = $_GET['query'] ?? ''; // Evita el "Undefined array key"
+
+if (!empty($query_busqueda)) {
+    $busqueda = "%" . $query_busqueda . "%";
+    $stmtB = $pdo->prepare("SELECT * FROM libros WHERE titulo LIKE ? OR autor LIKE ?");
+    $stmtB->execute([$busqueda, $busqueda]);
+    $resultados_busqueda = $stmtB->fetchAll();
 }
-// 2. Libros recomendados (Misma carrera y semestre)
-$sqlRec = "SELECT * FROM libros WHERE carrera_id = ? AND semestre_sugerido = ? AND categoria = 'academico' LIMIT 5";
-$stmtRec = $pdo->prepare($sqlRec);
-$stmtRec->execute([$alumno['carrera_id'], $alumno['semestre']]);
-$recomendados = $stmtRec->fetchAll();
+
+// 3. Libros Recomendados (Arregla error de la línea 111)
+$carrera_id = $alumno['carrera_id'] ?? 0;
+$semestre   = $alumno['semestre'] ?? 1;
+
+$stmtRec = $pdo->prepare("SELECT * FROM libros WHERE carrera_id = ? AND semestre_sugerido = ?");
+$stmtRec->execute([$carrera_id, $semestre]);
+$libros = $stmtRec->fetchAll(); // Aquí se define $libros para el foreach
 ?>
 
 <!DOCTYPE html>
@@ -31,29 +44,18 @@ $recomendados = $stmtRec->fetchAll();
     <meta charset="UTF-8">
     <title>Inicio | Biblioteca ITSUR</title>
     <link rel="stylesheet" href="../assets/css/main.css">
-    <style>
-        body { font-family: Arial, sans-serif; background-color: #e9ecef; margin: 0; }
-        /* Header estilo eLibro */
-        .top-bar { background-color: #212529; color: white; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; }
-        .nav-main { background-color: #2c2e31; color: #adb5bd; padding: 10px 20px; font-size: 0.9rem; }
-        .nav-main span { margin-right: 20px; cursor: pointer; }
-        
-        /* Contenedores */
-        .container { padding: 20px; }
-        .section-title { border-bottom: 2px solid #6f42c1; padding-bottom: 5px; margin-bottom: 20px; }
-        
-        /* Tarjetas de Libros */
-        .book-grid { display: flex; gap: 20px; overflow-x: auto; padding-bottom: 10px; }
-        .book-card { background: white; min-width: 150px; text-align: center; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); padding: 10px; }
-        .book-card img { width: 100%; height: 200px; object-fit: cover; }
-        .btn-ocio { background: #6f42c1; color: white; padding: 15px; border-radius: 5px; text-decoration: none; display: inline-block; margin-top: 20px; }
-    </style>
 </head>
 <body>
 
 <div class="top-bar">
-    <div><b>ITSUR</b> | Instituto Tecnológico Superior del Sur de Guanajuato</div>
-    <div>Hola, <?php echo $alumno['nombre']; ?> (<?php echo $alumno['nombre_carrera']; ?>) | <a href="../auth/logout.php" style="color:white;">Salir</a></div>
+    <div class="user-info">
+        Hola, <b><?php echo htmlspecialchars($alumno['nombre']); ?></b>
+        <br>
+        <small>
+            <?php echo htmlspecialchars($alumno['nombre_carrera']); ?> (Semestre <?php echo $alumno['semestre']; ?>)
+        </small>
+        <a href="../auth/logout.php">Salir</a>
+    </div>
 </div>
 
 <div class="nav-main">
@@ -68,20 +70,22 @@ $recomendados = $stmtRec->fetchAll();
         </button>
     </form>
 </div>
-<?php if ($resultados): ?>
+<?php if (!empty($query_busqueda)): ?>
     <div class="container">
-        <h3 class="section-title">Resultados de tu búsqueda: "<?php echo htmlspecialchars($_GET['query']); ?>"</h3>
+        <h3>Resultados para: "<?php echo htmlspecialchars($query_busqueda); ?>"</h3>
         <div class="book-grid">
-            <?php foreach($libros as $libro): ?>
-                <div class="book-card">
-                    <img src="ver_binario.php?t=libros&id=<?php echo $libro['id']; ?>" alt="Portada" style="width: 150px; height: 200px; object-fit: cover; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-                    <p><b><?php echo $libro['titulo']; ?></b></p>
-                    <a href="ver_libro.php?id=<?php echo $libro['id']; ?>" class="btn-primary" style="padding: 5px 10px; font-size: 12px;">Ver más</a>
-                </div>
-            <?php endforeach; ?>
+            <?php if ($resultados_busqueda): ?>
+                <?php foreach($resultados_busqueda as $libro): ?>
+                    <div class="book-card">
+                        <img src="../auth/ver_binario.php?id=<?php echo $libro['id']; ?>" alt="Portada">
+                        <p><b><?php echo htmlspecialchars($libro['titulo']); ?></b></p>
+                    </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <p>No se encontraron libros que coincidan.</p>
+            <?php endif; ?>
         </div>
     </div>
-    <hr>
 <?php endif; ?>
 <?php
 // Consulta para favoritos
@@ -98,7 +102,7 @@ $mis_favoritos = $stmtFav->fetchAll();
     <div class="book-grid">
         <?php foreach($mis_favoritos as $fav): ?>
             <div class="book-card">
-                <img src="ver_binario.php?t=libros&id=<?php echo $fav['id']; ?>" alt="Portada" style="width: 150px; height: 200px; object-fit: cover; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                <img src="../auth/ver_binario.php?t=libros&id=<?php echo $fav['id']; ?>" alt="Portada" style="width: 150px; height: 200px; object-fit: cover; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
                 <p><b><?php echo $fav['titulo']; ?></b></p>
             </div>
         <?php endforeach; ?>
@@ -106,15 +110,24 @@ $mis_favoritos = $stmtFav->fetchAll();
 </div>
 <?php endif; ?>
 <div class="container">
-    <h3 class="section-title">Recomendados para tu Carrera (Semestre <?php echo $alumno['semestre']; ?>)</h3>
+    <h3 class="section-title">
+        Recomendados para <?php echo htmlspecialchars($alumno['nombre_carrera']); ?> 
+        (Semestre <?php echo $alumno['semestre']; ?>)
+    </h3>
     <div class="book-grid">
-        <?php foreach($libros as $libro): ?>
-            <div class="book-card">
-                <img src="ver_binario.php?t=libros&id=<?php echo $libro['id']; ?>" alt="Portada" style="width: 150px; height: 200px; object-fit: cover; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-                <p><b><?php echo $libro['titulo']; ?></b></p>
-                <a href="ver_libro.php?id=<?php echo $libro['id']; ?>" class="btn-primary" style="padding: 5px 10px; font-size: 12px;">Ver más</a>
-            </div>
-        <?php endforeach; ?>
+        <?php if (!empty($libros)): ?>
+            <?php foreach ($libros as $libro): ?>
+                <div class="book-card">
+                    <a href="ver_libro.php?id=<?php echo $libro['id']; ?>">
+                        <img src="../auth/ver_binario.php?id=<?php echo $libro['id']; ?>" alt="Portada">
+                    </a>
+                    <p><b><?php echo htmlspecialchars($libro['titulo']); ?></b></p>
+                    <small><?php echo htmlspecialchars($libro['autor']); ?></small>
+                </div>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <p style="padding: 20px; color: #666;">Aún no hay libros cargados para tu semestre actual.</p>
+        <?php endif; ?>
     </div>
 
     <hr>

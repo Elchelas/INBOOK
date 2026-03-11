@@ -28,12 +28,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $_SESSION['rol']     = $user['rol'];
             $_SESSION['nombre']  = $user['nombre'];
             $_SESSION['carrera'] = $user['carrera_id'];
+            $_SESSION['semestre'] = $user['semestre']; // ¡ESTA LÍNEA ES VITAL!
 
             if ($user['rol'] == 'superadmin') {
                 header("Location: ../admin/dashboard.php");
             } else {
                 header("Location: ../alumno/home.php");
             }
+            exit();
+        }else {
+            header("Location: ../index.php?error=invalid_credentials");
             exit();
         }
     }

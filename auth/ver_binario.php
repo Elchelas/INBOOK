@@ -1,5 +1,5 @@
 <?php
-require_once 'config/db.php';
+require_once '../config/db.php';
 
 $tabla = $_GET['t'] ?? 'libros'; // 'libros' o 'usuarios'
 $id = $_GET['id'] ?? 0;

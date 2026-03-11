@@ -29,7 +29,7 @@ if (!$libro) { echo "Libro no encontrado."; exit(); }
 
     <div class="container" style="display: flex; gap: 40px; margin-top: 50px;">
         <div style="flex: 1; text-align: center;">
-            <img src="ver_binario.php?t=libros&id=<?php echo $libro['id']; ?>" alt="Portada" 
+            <img src="../auth/ver_binario.php?t=libros&id=<?php echo $libro['id']; ?>" alt="Portada" 
                  style="width: 300px; border-radius: 10px; box-shadow: 0 10px 20px rgba(0,0,0,0.2);">
         </div>
         
@@ -60,12 +60,7 @@ if (!$libro) { echo "Libro no encontrado."; exit(); }
                 style="background: #e83e8c; text-decoration: none; display: inline-block; width: auto; padding: 10px 20px;">
                 ❤ Agregar a mi estante
                 </a>
-                
-                <button class="btn-primary" style="width: auto; padding: 10px 20px;">
-                📖 Leer ahora
-                </button>
             </div>
-            <button class="btn-primary" style="margin-top: 30px; width: 250px;">Leer en línea</button>
         </div>
     </div>
 </body>

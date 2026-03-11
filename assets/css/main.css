@@ -1,0 +1,181 @@
+/* --- VARIABLES GLOBALES Y RESET --- */
+:root {
+    --primary-color: #6f42c1; /* Morado Institucional */
+    --dark-bg: #212529;
+    --nav-bg: #2c2e31;
+    --light-gray: #e9ecef;
+    --white: #ffffff;
+    --transition: all 0.3s ease;
+}
+
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background-color: var(--light-gray);
+    margin: 0;
+    color: #333;
+}
+
+/* --- HEADER Y NAVEGACIÓN (Estilo eLibro) --- */
+.top-bar {
+    background-color: var(--dark-bg);
+    color: var(--white);
+    padding: 10px 30px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    border-bottom: 1px solid #444;
+}
+
+.user-info {
+    text-align: right;
+    line-height: 1.4;
+}
+
+.user-info b { color: #f1c40f; }
+.user-info a { color: #ff4d4d; text-decoration: none; font-weight: bold; margin-left: 10px; }
+
+.nav-main {
+    background-color: var(--nav-bg);
+    color: #adb5bd;
+    padding: 12px 30px;
+    font-size: 0.9rem;
+    display: flex;
+    gap: 20px;
+}
+
+.nav-main span, .nav-main a {
+    color: #adb5bd;
+    text-decoration: none;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.nav-main span:hover, .nav-main a:hover {
+    color: var(--white);
+}
+
+/* --- BUSCADOR CENTRAL --- */
+.search-section {
+    background: var(--white);
+    padding: 30px 20px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+.search-form {
+    max-width: 600px;
+    margin: 0 auto;
+    display: flex;
+}
+
+.search-input {
+    border-radius: 20px 0 0 20px;
+    border: 1px solid var(--primary-color);
+    padding: 12px 20px;
+    flex-grow: 1;
+    outline: none;
+}
+
+.search-button {
+    border-radius: 0 20px 20px 0;
+    border: none;
+    background: var(--primary-color);
+    color: var(--white);
+    padding: 0 25px;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.search-button:hover { background: #5a32a3; }
+
+/* --- CONTENEDORES Y GRILLAS --- */
+.container {
+    padding: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.section-title {
+    font-size: 1.5rem;
+    color: var(--dark-bg);
+    border-bottom: 3px solid var(--primary-color);
+    padding-bottom: 8px;
+    margin-bottom: 25px;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.book-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 25px;
+    margin-bottom: 40px;
+}
+
+/* --- TARJETAS DE LIBROS --- */
+.book-card {
+    background: var(--white);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    padding: 15px;
+    text-align: center;
+    transition: var(--transition);
+    border: 1px solid transparent;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.book-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--primary-color);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+}
+
+.book-card img {
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-bottom: 12px;
+}
+
+.book-card b {
+    display: block;
+    font-size: 0.95rem;
+    margin-bottom: 5px;
+    color: #222;
+}
+
+.book-card small {
+    color: #666;
+    display: block;
+    margin-bottom: 10px;
+}
+
+/* --- SECCIÓN OCIO --- */
+.ocio-banner {
+    background: var(--white);
+    padding: 40px;
+    border-radius: 12px;
+    text-align: center;
+    margin-top: 20px;
+    border: 2px dashed var(--primary-color);
+}
+
+.btn-ocio {
+    background: var(--primary-color);
+    color: var(--white);
+    padding: 15px 30px;
+    border-radius: 30px;
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 15px;
+    font-weight: bold;
+    transition: var(--transition);
+}
+
+.btn-ocio:hover {
+    background: var(--dark-bg);
+    transform: scale(1.05);
+}

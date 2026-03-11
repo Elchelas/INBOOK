@@ -51,6 +51,7 @@ $totalAlumnos = $pdo->query("SELECT count(*) FROM usuarios WHERE rol='alumno'")-
         <div class="card-body">
             <a href="agregar_libro.php" class="btn btn-outline-primary">Añadir Nuevo Libro</a>
             <a href="gestionar_usuarios.php" class="btn btn-outline-secondary">Gestionar Alumnos</a>
+            <a href="gestionar_libros.php" class="btn btn-outline-secondary">Gestionar Libros</a>
             <a href="reportes.php" class="btn btn-outline-info">Ver Reportes de Lectura</a>
         </div>
     </div>
