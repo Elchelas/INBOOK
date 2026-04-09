@@ -1,0 +1,87 @@
+
+.filter-panel { 
+    background: white; 
+    padding: 30px; 
+    border-radius: 15px; 
+    margin-top: -30px; 
+    box-shadow: var(--shadow-soft);
+    border: 1px solid #eee;
+}
+.filter-grid { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+    gap: 20px; 
+}
+.btn-search-advanced { 
+    background: var(--itsur-blue); 
+    color: white; 
+    border: none; 
+    padding: 15px; 
+    border-radius: 10px; 
+    cursor: pointer; 
+    width: 100%; 
+    font-weight: 800; 
+    margin-top: 20px;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+.btn-search-advanced:hover { background: var(--itsur-blue-dark); transform: translateY(-2px); }
+
+.results-count {
+    margin: 30px 0 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--itsur-yellow);
+    display: inline-block;
+}
+
+/* Estilo uniforme para Inputs y Selects */
+.form-control {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    color: #475569;
+    background-color: #f8fafc;
+    transition: all 0.3s ease;
+    outline: none;
+    appearance: none; /* Elimina la flecha por defecto en algunos navegadores */
+}
+
+/* Diseño específico para los Combo Box (Select) */
+select.form-control {
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%236f42c1' class='bi bi-chevron-down' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 12px;
+    padding-right: 40px; /* Espacio para la flecha personalizada */
+}
+
+.form-control:focus {
+    border-color: var(--itsur-blue);
+    background-color: #fff;
+    box-shadow: 0 0 0 4px rgba(10, 54, 115, 0.1);
+}
+
+.form-group label {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--itsur-blue-dark);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Ajuste del panel de filtros */
+.filter-panel {
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 15px;
+    border: 1px solid #edf2f7;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+}

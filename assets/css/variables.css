@@ -1,0 +1,61 @@
+/* VARIABLES CSS GLOBALES PARA TODO EL PROYECTO INBOOK - ITSUR */
+:root {
+    /* --- PALETA INSTITUCIONAL ITSUR (Identidad) --- */
+    
+    /* AZULES (Confianza y Tecnología) */
+    --itsur-blue-dark: #1a3a5f;      /* Azul marino profundo (Encabezados/Sidebars) */
+    --itsur-blue: #2a5a8a;           /* Azul medio (Botones primarios) */
+    --itsur-blue-light: #eef4f9;     /* Azul muy tenue (Fondos de sección) */
+    
+    /* VERDES (Crecimiento y Educación) */
+    --itsur-green: #2ecc71;          /* Verde vibrante (Éxito/Confirmación) */
+    --itsur-green-dark: #27ae60;     /* Verde oscuro (Hover de botones) */
+    --itsur-green-soft: #d5f5e3;     /* Verde pastel (Alertas/Badges) */
+    
+    /* AMARILLOS (Energía y Alerta) */
+    --itsur-yellow: #f1c40f;         /* Amarillo "oro" (Llamados a la acción/Favoritos) */
+    --itsur-yellow-dark: #d4ac0d;    /* Amarillo oscuro (Iconos/Detalles) */
+    --itsur-yellow-light: #fef9e7;   /* Crema/Amarillo suave (Fondo de avisos) */
+
+    /* COLORES NEUTROS */
+    --text-main: #2c3e50;            /* Gris casi negro para lectura */
+    --text-muted: #7f8c8d;           /* Gris para textos secundarios */
+    --bg-page: #f4f7f6;              /* Fondo general de la página */
+    --white: #ffffff;
+    --danger: #e74c3c;               /* Rojo para errores/eliminar */
+
+    /* --- TIPOGRAFÍA (Identidad Visual) --- */
+    
+    /* Fuente para Títulos (Moderna y Robusta) */
+    --font-titles: 'Montserrat', 'Segoe UI', sans-serif;
+    /* Fuente para Cuerpo (Altamente legible) */
+    --font-body: 'Open Sans', 'Roboto', system-ui, sans-serif;
+    /* Fuente para código o datos técnicos (Simulación) */
+    --font-mono: 'Fira Code', 'Courier New', monospace;
+
+    /* --- ESTRUCTURA Y EFECTOS --- */
+    --border-radius: 12px;
+    --border-radius-sm: 6px;
+    --shadow-soft: 0 4px 6px rgba(0,0,0,0.07);
+    --shadow-medium: 0 8px 15px rgba(0,0,0,0.1);
+    --transition: all 0.3s ease;
+}
+
+/* RESET BÁSICO PARA TODO EL PROYECTO */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-body);
+    background-color: var(--bg-page);
+    color: var(--text-main);
+    line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5 {
+    font-family: var(--font-titles);
+    font-weight: 700;
+}

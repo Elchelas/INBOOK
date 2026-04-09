@@ -1,0 +1,120 @@
+/* --- Estructura y Contenedores --- */
+.grid-colecciones {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
+    margin-top: 40px;
+    margin-bottom: 60px;
+}
+
+.header-intro {
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: var(--shadow-soft);
+    margin-bottom: 20px;
+    border: 1px solid #f0f0f0;
+}
+
+/* --- Tarjeta Base (Especialidades) --- */
+.card-coleccion {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    border: 1px solid #eee;
+    border-left: 6px solid var(--itsur-blue); /* Azul Institucional */
+    text-decoration: none;
+    color: #333;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    box-shadow: var(--shadow-soft);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Marca de agua decorativa al fondo de la tarjeta */
+.card-coleccion::after {
+    content: "\F210"; /* Icono de libro de Bootstrap Icons */
+    font-family: "bootstrap-icons";
+    position: absolute;
+    right: -10px;
+    bottom: -10px;
+    font-size: 5rem;
+    opacity: 0.03;
+    transform: rotate(-15deg);
+    pointer-events: none;
+}
+
+.card-coleccion:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 20px rgba(0,0,0,0.1);
+    border-color: var(--itsur-blue);
+    background: #fdfdff;
+}
+
+/* --- Tipografía Interna --- */
+.card-coleccion h3 { 
+    margin: 10px 0 0; 
+    font-size: 1.15rem; 
+    color: var(--itsur-blue-dark);
+    font-weight: 800;
+    line-height: 1.3;
+}
+
+.card-coleccion p { 
+    margin: 12px 0 20px; 
+    color: #666; 
+    font-size: 0.9rem; 
+    line-height: 1.5;
+}
+
+/* --- Badge de Conteo --- */
+.badge-count {
+    background: var(--itsur-blue-dark);
+    color: white;
+    padding: 6px 14px;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    align-self: flex-start;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 1;
+}
+
+/* --- Variante para Ocio (Amarillo/Naranja) --- */
+.ocio-card { 
+    border-left-color: var(--itsur-yellow); 
+}
+
+.ocio-card h3 { 
+    color: #856404; /* Tono café dorado para legibilidad */
+}
+
+.ocio-card .badge-count { 
+    background: var(--itsur-yellow); 
+    color: #000; 
+}
+
+/* Iconos superiores */
+.card-coleccion .bi {
+    font-size: 1.8rem;
+    transition: transform 0.3s ease;
+}
+
+.card-coleccion:hover .bi {
+    transform: scale(1.1);
+}
+
+/* --- Responsividad --- */
+@media (max-width: 768px) {
+    .grid-colecciones {
+        grid-template-columns: 1fr;
+    }
+    
+    .header-intro {
+        padding: 25px;
+    }
+}

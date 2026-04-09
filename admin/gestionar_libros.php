@@ -1,6 +1,5 @@
 <?php
 session_start();
-// Validación de rango: Solo SuperAdmin del ITSUR puede entrar
 if (!isset($_SESSION['user_id']) || $_SESSION['rol'] != 'superadmin') {
     header("Location: ../index.php");
     exit();
@@ -28,71 +27,97 @@ $libros = $pdo->query($sql)->fetchAll();
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Gestión de Libros | Admin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Inventario | INBOOK ITSUR</title>
+    <link rel="stylesheet" href="../assets/css/variables.css">
     <link rel="stylesheet" href="../assets/css/main.css">
-    <style>
-        .admin-table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; }
-        .admin-table th, .admin-table td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #eee; }
-        .admin-table th { background: #212529; color: white; }
-        .admin-table tr:hover { background: #f8f9fa; }
-        .img-preview { width: 50px; height: 70px; object-fit: cover; border-radius: 4px; }
-        .btn-add { background: #28a745; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block; margin-bottom: 20px; }
-    </style>
+    <link rel="stylesheet" href="../assets/css/admin_tables.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 </head>
-<body>
+<body class="admin-body">
 
-<div class="top-bar">
-    <div class="user-info">
-        <b>ADMINISTRACIÓN DE ACERVO</b> | 
-        <a href="dashboard.php" style="color:white; text-decoration:none;">Panel Principal</a>
-    </div>
-</div>
-
-<div class="container">
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-        <h2>Inventario de Libros</h2>
-        <a href="agregar_libro.php" class="btn-add">+ Agregar Nuevo Libro</a>
+    <div class="top-bar">
+        <div class="user-info">
+            <i class="bi bi-bookshelf"></i>
+            <b>INVENTARIO BIBLIOGRÁFICO</b> | ITSUR
+        </div>
+        <a href="dashboard.php" class="btn-logout" style="border-color: var(--itsur-yellow); color: var(--itsur-yellow);">
+            <i class="bi bi-speedometer2"></i> Volver al Panel
+        </a>
     </div>
 
-    <?php if(isset($_GET['msg'])) echo "<p style='color:green; font-weight:bold;'>Acción realizada con éxito.</p>"; ?>
+    <div class="container mt-5">
+        <div class="table-header-actions">
+            <div>
+                <h2>Acervo Digital</h2>
+                <p class="subtitle">Administra los títulos disponibles en la plataforma.</p>
+            </div>
+            <a href="agregar_libro.php" class="btn-add-new">
+                <i class="bi bi-plus-lg"></i> Registrar Nuevo Libro
+            </a>
+        </div>
 
-    <table class="admin-table">
-        <thead>
-            <tr>
-                <th>Portada</th>
-                <th>Título</th>
-                <th>Autor</th>
-                <th>Carrera / Semestre</th>
-                <th>Categoría</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach($libros as $l): ?>
-            <tr>
-                <td>
-                    <img src="../auth/ver_binario.php?id=<?php echo $l['id']; ?>" class="img-preview" alt="Miniatura">
-                </td>
-                <td><b><?php echo htmlspecialchars($l['titulo']); ?></b></td>
-                <td><?php echo htmlspecialchars($l['autor']); ?></td>
-                <td>
-                    <small><?php echo htmlspecialchars($l['nombre_carrera'] ?? 'General'); ?></small><br>
-                    <span class="badge"><?php echo $l['semestre_sugerido']; ?>° Semestre</span>
-                </td>
-                <td>
-                    <span style="text-transform: capitalize;"><?php echo $l['categoria']; ?></span>
-                </td>
-                <td>
-                    <a href="editar_libro.php?id=<?php echo $l['id']; ?>" style="color: #007bff; text-decoration: none; margin-right: 10px;">Editar</a>
-                    <a href="gestionar_libros.php?eliminar=<?php echo $l['id']; ?>" 
-                       style="color: #dc3545; text-decoration: none;" 
-                       onclick="return confirm('¿Seguro que deseas eliminar este libro?')">Eliminar</a>
-                </td>
-            </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
-</div>
+        <?php if(isset($_GET['msg'])): ?>
+            <div class="alert-success-custom animate-slide-in">
+                <i class="bi bi-check-circle-fill"></i> Operación completada con éxito.
+            </div>
+        <?php endif; ?>
+
+        <div class="table-responsive-container">
+            <table class="modern-table">
+                <thead>
+                    <tr>
+                        <th width="80">Portada</th>
+                        <th>Información del Título</th>
+                        <th>Origen Académico</th>
+                        <th>Clasificación</th>
+                        <th width="150" class="text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach($libros as $l): ?>
+                    <tr>
+                        <td>
+                            <div class="img-wrapper">
+                                <img src="../auth/ver_binario.php?id=<?php echo $l['id']; ?>" alt="Miniatura">
+                            </div>
+                        </td>
+                        <td>
+                            <div class="title-cell">
+                                <span class="book-title"><?php echo htmlspecialchars($l['titulo']); ?></span>
+                                <span class="book-author"><?php echo htmlspecialchars($l['autor']); ?></span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="academic-cell">
+                                <span class="career-name"><?php echo htmlspecialchars($l['nombre_carrera'] ?? 'Uso General'); ?></span>
+                                <span class="semester-badge"><?php echo $l['semestre_sugerido']; ?>° Semestre</span>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="category-tag <?php echo $l['categoria']; ?>">
+                                <?php echo ($l['categoria'] == 'academico') ? '<i class="bi bi-journal-bookmark"></i> Académico' : '<i class="bi bi-controller"></i> Ocio'; ?>
+                            </span>
+                        </td>
+                        <td class="text-center">
+                            <div class="action-btns-group">
+                                <a href="editar_libro.php?id=<?php echo $l['id']; ?>" class="btn-action edit" title="Editar">
+                                    <i class="bi bi-pencil-fill"></i>
+                                </a>
+                                <a href="gestionar_libros.php?eliminar=<?php echo $l['id']; ?>" 
+                                   class="btn-action delete" 
+                                   title="Eliminar"
+                                   onclick="return confirm('¿Confirma que desea eliminar permanentemente este libro del sistema?')">
+                                    <i class="bi bi-trash3-fill"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
 </body>
 </html>

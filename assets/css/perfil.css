@@ -1,0 +1,154 @@
+.profile-card {
+    background: white;
+    border-radius: 20px;
+    box-shadow: var(--shadow-soft);
+    overflow: hidden;
+    border: 1px solid #eee;
+}
+
+.profile-header {
+    background: linear-gradient(135deg, var(--itsur-blue-dark), var(--itsur-blue));
+    padding: 40px;
+    text-align: center;
+    color: white;
+}
+
+.profile-header h2 { margin-top: 15px; margin-bottom: 5px; font-weight: 800; }
+
+.badge-role {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+/* --- Avatar Upload Design --- */
+.avatar-upload {
+    position: relative;
+    max-width: 150px;
+    margin: 0 auto;
+}
+
+.avatar-edit {
+    position: absolute;
+    right: 10px;
+    z-index: 1;
+    top: 10px;
+}
+
+.avatar-edit input { display: none; }
+
+.avatar-edit label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    margin-bottom: 0;
+    border-radius: 100%;
+    background: var(--itsur-yellow);
+    border: 1px solid transparent;
+    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.12);
+    cursor: pointer;
+    color: #000;
+    transition: all .2s ease-in-out;
+}
+
+.avatar-edit label:hover { background: #f1f1f1; border-color: #d6d6d6; }
+
+.avatar-preview {
+    width: 150px;
+    height: 150px;
+    position: relative;
+    border-radius: 100%;
+    border: 6px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
+}
+
+.avatar-preview img {
+    width: 100%;
+    height: 100%;
+    border-radius: 100%;
+    object-fit: cover;
+}
+
+/* --- Formulario --- */
+.profile-body { padding: 40px; }
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+@media (max-width: 600px) { .info-grid { grid-template-columns: 1fr; } }
+
+.btn-save {
+    background: var(--itsur-blue);
+    color: white;
+    border: none;
+    padding: 15px 40px;
+    border-radius: 10px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.btn-save:hover { background: var(--itsur-blue-dark); transform: scale(1.05); }
+
+.alert-success {
+    background: #d4edda;
+    color: #155724;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: 600;
+}
+
+/* Estilo base para todos los campos de formulario */
+.form-control {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    color: #475569;
+    background-color: #f8fafc;
+    transition: all 0.3s ease;
+    outline: none;
+    font-family: inherit;
+}
+
+/* --- Diseño Específico para Combo Box (select) --- */
+select.form-control {
+    cursor: pointer;
+    appearance: none; /* Elimina la flecha original del sistema */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    
+    /* Añadimos una flecha personalizada con un SVG del color institucional */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%230a3673' class='bi bi-chevron-down' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 14px;
+    padding-right: 40px; /* Evita que el texto se encime con la flecha */
+}
+
+/* Estado de enfoque (Focus) */
+.form-control:focus {
+    border-color: var(--itsur-blue);
+    background-color: #fff;
+    box-shadow: 0 0 0 4px rgba(10, 54, 115, 0.1);
+}
+
+/* Estilo para las etiquetas (Labels) */
+.form-group label {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--itsur-blue-dark);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}

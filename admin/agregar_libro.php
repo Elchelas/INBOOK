@@ -1,34 +1,40 @@
 <?php
 require_once '../config/db.php';
+
+// Consulta de carreras para el select
 $stmtC = $pdo->query("SELECT id, nombre_carrera FROM carreras ORDER BY nombre_carrera ASC");
 $carreras = $stmtC->fetchAll();
+
+$mensaje = "";
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $titulo = $_POST['titulo'];
     $autor = $_POST['autor'];
     $categoria = $_POST['categoria'];
-    $carrera_id = !empty($_POST['carrera_id']) ? $_POST['carrera_id'] : null;
-    $semestre = !empty($_POST['semestre']) ? $_POST['semestre'] : null;
+    
+    // Lógica para Género y Datos Académicos
+    $genero = ($categoria === 'ocio') ? $_POST['genero'] : null;
+    $carrera_id = ($categoria === 'academico' && !empty($_POST['carrera_id'])) ? $_POST['carrera_id'] : null;
+    $semestre = ($categoria === 'academico' && !empty($_POST['semestre'])) ? $_POST['semestre'] : null;
 
-    // VALIDACIÓN Y CARGA DE IMAGEN
     if (isset($_FILES['portada']) && $_FILES['portada']['error'] == 0) {
-        // Leemos el contenido del archivo temporal como una cadena de bits
         $datos_imagen = file_get_contents($_FILES['portada']['tmp_name']);
 
-        $sql = "INSERT INTO libros (titulo, autor, categoria, carrera_id, semestre_sugerido, portada) 
-                VALUES (?, ?, ?, ?, ?, ?)";
+        // Insertamos incluyendo la nueva columna 'genero'
+        $sql = "INSERT INTO libros (titulo, autor, categoria, genero, carrera_id, semestre_sugerido, portada) 
+                VALUES (?, ?, ?, ?, ?, ?, ?)";
         
         $stmt = $pdo->prepare($sql);
-        
-        // Usamos bindParam para asegurar que el BLOB se envíe correctamente
         $stmt->bindParam(1, $titulo);
         $stmt->bindParam(2, $autor);
         $stmt->bindParam(3, $categoria);
-        $stmt->bindParam(4, $carrera_id);
-        $stmt->bindParam(5, $semestre);
-        $stmt->bindParam(6, $datos_imagen, PDO::PARAM_LOB); // <--- Clave para imágenes
+        $stmt->bindParam(4, $genero);
+        $stmt->bindParam(5, $carrera_id);
+        $stmt->bindParam(6, $semestre);
+        $stmt->bindParam(7, $datos_imagen, PDO::PARAM_LOB);
         
         if($stmt->execute()) {
-            echo "<p style='color:green'>Libro guardado con éxito en la Base de Datos.</p>";
+            $mensaje = "Libro guardado con éxito en la Base de Datos.";
         }
     }
 }
@@ -36,69 +42,125 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <!DOCTYPE html>
 <html lang="es">
-    <div class="top-bar">
-        <div><b>ADMIN</b> | Gestión de Biblioteca</div>
-        <a href="dashboard.php" style="color:white;">Volver al Panel</a>
-    </div>
 <head>
-    <link rel="stylesheet" href="../assets/css/style.css">
-    <style>
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; }
-        th, td { padding: 12px; border: 1px solid #ddd; text-align: left; }
-        th { background-color: var(--dark-bg); color: white; }
-        .img-tabla { width: 50px; height: 70px; object-fit: cover; border-radius: 4px; }
-        .btn-delete { background: #dc3545; color: white; padding: 5px 10px; border-radius: 4px; text-decoration: none; font-size: 0.8rem; }
-        .btn-delete:hover { background: #a71d2a; }
-    </style>
-    <title>Agregar Libro | Admin</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar Libro | Panel Administrativo</title>
+    <link rel="stylesheet" href="../assets/css/variables.css">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/admin_forms.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 </head>
-<body class="bg-light">
-    <div class="container mt-4">
-        <div class="card shadow">
-            <div class="card-header bg-dark text-white"><h5>Nuevo Libro</h5></div>
-            <div class="card-body">
-                <form method="POST" enctype="multipart/form-data">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label>Título</label>
-                            <input type="text" name="titulo" class="form-control" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label>Autor</label>
-                            <input type="text" name="autor" class="form-control" required>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4 mb-3">
-                            <label>Categoría</label>
-                            <select name="categoria" class="form-select" id="cat_select" required>
-                                <option value="academico">Académico</option>
-                                <option value="ocio">Ocio / Literatura</option>
-                            </select>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <label>Carrera (Solo académicos)</label>
-                            <select name="carrera_id" class="form-select">
-                                <option value="">Acervo de uso común</option>
-                                <?php foreach($carreras as $c): ?>
-                                    <option value="<?=$c['id']?>"><?=$c['nombre_carrera']?></option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <label>Semestre</label>
-                            <input type="number" name="semestre" class="form-control" min="1" max="10">
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label>Imagen de Portada</label>
-                        <input type="file" name="portada" class="form-control" accept="image/*" required>
-                    </div>
-                    <button type="submit" class="btn btn-success">Guardar Libro</button>
-                </form>
+<body class="admin-body">
+
+    <div class="top-bar">
+        <div class="user-info">
+            <i class="bi bi-shield-lock-fill"></i>
+            <b>ADMIN</b> | Gestión de Biblioteca
+        </div>
+        <a href="dashboard.php" class="btn-logout" style="border-color: var(--itsur-yellow); color: var(--itsur-yellow);">
+            <i class="bi bi-arrow-left"></i> Volver al Panel
+        </a>
+    </div>
+
+    <div class="container mt-5">
+        <?php if($mensaje): ?>
+            <div class="alert-success-custom">
+                <i class="bi bi-check-circle-fill"></i> <?php echo $mensaje; ?>
             </div>
+        <?php endif; ?>
+
+        <div class="admin-card">
+            <h2><i class="bi bi-book-half"></i> Registrar Nuevo Libro</h2>
+            
+            <form method="POST" enctype="multipart/form-data" class="custom-form">
+                <div class="row">
+                    <div class="form-group">
+                        <label><i class="bi bi-tag-fill"></i> Título del Libro</label>
+                        <input type="text" name="titulo" class="form-control" placeholder="Ej: Estructura de Datos" required>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="bi bi-person-fill"></i> Autor(es)</label>
+                        <input type="text" name="autor" class="form-control" placeholder="Nombre del autor" required>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group">
+                        <label>Categoría del Recurso</label>
+                        <select name="categoria" id="categoriaSelect" class="form-control" onchange="toggleFields()" required>
+                            <option value="academico">Académico (ITSUR)</option>
+                            <option value="ocio">Ocio / Lectura Ligera</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="generoGroup" style="display: none;">
+                        <label>Género Literario</label>
+                        <select name="genero" class="form-control">
+                            <option value="">Selecciona un género...</option>
+                            <option value="terror">Terror / Suspenso</option>
+                            <option value="ciencia_ficcion">Ciencia Ficción</option>
+                            <option value="aventura">Aventura</option>
+                            <option value="romance">Romance</option>
+                            <option value="fantasia">Fantasía</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="academicFields" class="row">
+                    <div class="form-group">
+                        <label>Carrera Destino</label>
+                        <select name="carrera_id" class="form-control">
+                            <option value="">Todas las carreras...</option>
+                            <?php foreach ($carreras as $c): ?>
+                                <option value="<?php echo $c['id']; ?>"><?php echo $c['nombre_carrera']; ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Semestre Sugerido</label>
+                        <input type="number" name="semestre" class="form-control" min="1" max="12" placeholder="Ej: 4">
+                    </div>
+                </div>
+
+                <div class="preview-box" onclick="document.getElementById('portada_input').click()">
+                    <i class="bi bi-cloud-arrow-up" style="font-size: 2.5rem; color: var(--itsur-blue);"></i>
+                    <p style="margin: 10px 0; font-weight: 600;">Arrastra o selecciona la portada</p>
+                    <input type="file" name="portada" id="portada_input" accept="image/*" style="display:none;" required>
+                    <div id="file-name-display" style="margin-top: 10px; font-size: 0.85rem; color: var(--itsur-blue-dark);"></div>
+                </div>
+
+                <div class="action-buttons">
+                    <button type="submit" class="btn-save">
+                        <i class="bi bi-cloud-arrow-up-fill"></i> Guardar en Biblioteca
+                    </button>
+                    <a href="dashboard.php" class="btn-cancel" style="text-decoration:none;">Cancelar</a>
+                </div>
+            </form>
         </div>
     </div>
+
+    <script>
+        function toggleFields() {
+            const categoria = document.getElementById('categoriaSelect').value;
+            const generoGroup = document.getElementById('generoGroup');
+            const academicFields = document.getElementById('academicFields');
+
+            if (categoria === 'ocio') {
+                generoGroup.style.display = 'block';
+                academicFields.style.display = 'none';
+            } else {
+                generoGroup.style.display = 'none';
+                academicFields.style.display = 'flex';
+            }
+        }
+
+        document.getElementById('portada_input').addEventListener('change', function(e){
+            if(e.target.files.length > 0){
+                var fileName = e.target.files[0].name;
+                document.getElementById('file-name-display').innerText = "Archivo listo: " + fileName;
+            }
+        });
+    </script>
 </body>
 </html>

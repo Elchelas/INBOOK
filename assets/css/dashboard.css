@@ -1,0 +1,122 @@
+/* assets/css/dashboard.css */
+
+.admin-dashboard {
+    background-color: #f0f4f8;
+}
+
+.welcome-text {
+    color: var(--itsur-blue-dark);
+    font-weight: 800;
+    margin-bottom: 5px;
+    font-size: 2rem;
+}
+
+.subtitle {
+    color: var(--text-muted);
+    margin-bottom: 35px;
+}
+
+/* Tarjetas de Estadísticas Estilo Moderno */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+}
+
+.stat-card {
+    background: var(--white);
+    padding: 30px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.03);
+    transition: var(--transition);
+    border-bottom: 4px solid transparent;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-medium);
+}
+
+.stat-card.blue { border-color: var(--itsur-blue); }
+.stat-card.green { border-color: var(--itsur-green); }
+.stat-card.yellow { border-color: var(--itsur-yellow); }
+
+.stat-icon {
+    font-size: 2.5rem;
+    width: 70px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px;
+}
+
+.blue .stat-icon { background: rgba(42, 90, 138, 0.1); color: var(--itsur-blue); }
+.green .stat-icon { background: rgba(46, 204, 113, 0.1); color: var(--itsur-green); }
+.yellow .stat-icon { background: rgba(241, 196, 15, 0.1); color: var(--itsur-yellow-dark); }
+
+.stat-info h3 { font-size: 2rem; margin: 0; color: var(--itsur-blue-dark); }
+.stat-info p { margin: 0; color: var(--text-muted); font-weight: 600; }
+
+/* Tarjetas de Gestión */
+.admin-sections {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+}
+
+.management-card {
+    background: var(--white);
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: var(--shadow-soft);
+}
+
+.management-card h3 {
+    font-size: 1.25rem;
+    color: var(--itsur-blue-dark);
+    margin-bottom: 25px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #f0f4f8;
+}
+
+.action-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.action-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px 20px;
+    text-decoration: none;
+    color: var(--itsur-blue-dark);
+    border-radius: 12px;
+    background: #f8fafc;
+    font-weight: 600;
+    transition: var(--transition);
+}
+
+.action-item:hover {
+    background: #edf2f7;
+    padding-left: 25px;
+    color: var(--itsur-blue);
+}
+
+.action-item.primary {
+    background: var(--itsur-blue-dark);
+    color: white;
+}
+
+.action-item.primary:hover {
+    background: var(--itsur-blue);
+}
+
+@media (max-width: 768px) {
+    .admin-sections { grid-template-columns: 1fr; }
+}
