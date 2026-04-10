@@ -51,6 +51,10 @@ $stmtFav = $pdo->prepare("SELECT l.* FROM libros l
                           WHERE f.usuario_id = ? LIMIT 6");
 $stmtFav->execute([$usuario_id]);
 $mis_favoritos = $stmtFav->fetchAll();
+
+// 5. Para cargar los videos que existan
+$stmtVid = $pdo->query("SELECT * FROM recursos_video ORDER BY fecha_registro DESC LIMIT 4");
+$videos_destacados = $stmtVid->fetchAll();
 ?>
 
 <!DOCTYPE html>
@@ -85,6 +89,7 @@ $mis_favoritos = $stmtFav->fetchAll();
     <a href="home.php" class="active"><i class="bi bi-house-door"></i> Inicio</a>
     <a href="colecciones.php"><i class="bi bi-collection"></i> Colecciones</a>
     <a href="busqueda.php"><i class="bi bi-search"></i> Búsqueda Avanzada</a>
+    <a href="videos.php"><i class="bi bi-play-btn-fill"></i> Videos destacados</a>
     <a href="mi_estante.php"><i class="bi bi-bookmark-heart"></i> Mi Estante</a>
 </nav>
 
@@ -122,6 +127,28 @@ $mis_favoritos = $stmtFav->fetchAll();
                 <?php endif; ?>
             </div>
         </section>
+    <?php endif; ?>
+
+    <?php if(!empty($videos_destacados) && empty($query_busqueda)): ?>
+    <section class="home-section videos-preview">
+        <div class="section-header">
+            <h3 class="section-title"><i class="bi bi-play-btn-fill" style="color: #ff0000;"></i> Tutoriales y Videoclases</h3>
+            <a href="videos.php">Ver videoteca</a>
+        </div>
+        <div class="video-grid-home">
+            <?php foreach($videos_destacados as $video): ?>
+                <div class="video-card-mini">
+                    <a href="ver_video.php?id=<?php echo $video['id']; ?>" class="video-thumb">
+                        <img src="../assets/img/video_placeholder.jpg" alt="Miniatura">
+                        <span class="play-badge"><i class="bi bi-play-fill"></i></span>
+                    </a>
+                    <div class="video-info">
+                        <span class="v-title"><?php echo htmlspecialchars($video['titulo']); ?></span>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    </section>
     <?php endif; ?>
 
     <?php if($mis_favoritos && empty($query_busqueda)): ?>

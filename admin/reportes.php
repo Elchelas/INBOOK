@@ -34,7 +34,7 @@ $reportes = $pdo->query($sql)->fetchAll();
             <b>MÉTRICAS DE CONSULTA</b> | ITSUR
         </div>
         <a href="dashboard.php" class="btn-logout" style="border-color: var(--itsur-yellow); color: var(--itsur-yellow);">
-            <i class="bi bi-speedometer2"></i> Dashboard
+            <i class="bi bi-speedometer2"></i> Panel Principal
         </a>
     </div>
 

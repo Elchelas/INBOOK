@@ -43,7 +43,7 @@ function obtenerYoutubeID($url) {
 <div class="top-bar">
     <div class="user-brand">
         <a href="home.php" class="back-link">
-            <i class="bi bi-arrow-left-circle"></i> Regresar al Inicio
+            <i class="bi bi-arrow-left-circle"></i> Volver al Inicio
         </a>
     </div>
 </div>

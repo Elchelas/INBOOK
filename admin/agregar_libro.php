@@ -55,11 +55,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     <div class="top-bar">
         <div class="user-info">
-            <i class="bi bi-shield-lock-fill"></i>
-            <b>ADMIN</b> | Gestión de Biblioteca
+            <i class="bi bi-play-btn-fill"></i>
+            <b>GESTIÓN MULTIMEDIA</b> | ITSUR
         </div>
         <a href="dashboard.php" class="btn-logout" style="border-color: var(--itsur-yellow); color: var(--itsur-yellow);">
-            <i class="bi bi-arrow-left"></i> Volver al Panel
+            <i class="bi bi-house-door"></i> Panel Principal
         </a>
     </div>
 

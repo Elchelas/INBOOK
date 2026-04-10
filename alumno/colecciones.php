@@ -32,12 +32,9 @@ $totalOcio = $pdo->query($sqlOcio)->fetchColumn();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Colecciones | INBOOK ITSUR</title>
-    
     <link rel="stylesheet" href="../assets/css/variables.css">
     <link rel="stylesheet" href="../assets/css/main.css">
-    
     <link rel="stylesheet" href="../assets/css/colecciones.css">
-    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 </head>
 <body>
@@ -46,7 +43,7 @@ $totalOcio = $pdo->query($sqlOcio)->fetchColumn();
         <div class="user-brand">
             <a href="home.php" class="back-link">
                 <i class="bi bi-arrow-left-circle"></i> 
-                <span>Regresar al Inicio</span>
+                <span>Volver al Inicio</span>
             </a>
         </div>
     </div>

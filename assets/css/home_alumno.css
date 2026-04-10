@@ -7,6 +7,20 @@
     background: var(--itsur-blue-dark);
     color: white;
 }
+/* Forzamos el color blanco al enlace y a su icono, incluso si ya se hizo clic */
+.logout-icon, .logout-icon:visited {
+    color: white !important;
+    text-decoration: none !important;
+} 
+.logout-icon i {
+    color: white !important;
+    text-decoration: none !important;
+}
+
+/* Opcional: que cambie a amarillo cuando pases el mouse para que se sienta interactivo */
+.logout-icon:hover i {
+    color: var(--itsur-yellow) !important;
+}
 
 .user-brand { font-size: 1.2rem; display: flex; align-items: center; gap: 10px; }
 .user-profile-zone { display: flex; align-items: center; gap: 15px; }

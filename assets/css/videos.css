@@ -95,3 +95,39 @@
 .empty-state h3 {
     color: #4a5568;
 }
+
+.top-bar {
+    display: flex;
+    align-items: center;
+    flex-direction: row-reverse;
+}
+/* Seleccionamos el botón de volver y forzamos que ignore el estado "visitado" */
+.btn-logout, 
+.btn-logout:visited {
+    color: var(--white) !important; 
+    text-decoration: none;
+}
+
+/* Si tienes un enlace de "Regresar" general en el top-bar */
+.top-bar a, 
+.top-bar a:visited {
+    color: var(--white) !important; 
+    font-weight: 400;
+    font-size: 1.3rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.3s ease;
+}
+
+/* Para que el icono NO se quede morado tampoco */
+.top-bar a i, 
+.top-bar a:visited i {
+    color: inherit !important; 
+}
+
+/* Efecto hover opcional para que se sienta vivo al pasar el mouse */
+.top-bar a:hover {
+    filter: brightness(1.2); /* Lo hace un poquito más brillante */
+    color: var(--itsur-yellow) !important;
+}
